@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title></title>
+  <style>
+  .qtBlck {
+    width: 1000px;
+    height: 150px;
+    background: blue;
+    color: white;
+  }
+  </style>
+  </head>
+  <body>
+    <div>
+      <button type="button" onClick="getQuote()">quote</button>
+    </div>
+    <div id="quote" class="qtBlck">
+      quote goes here!
+    </div>
+    <div id="comic">
+      comic goes here
+    </div>
+    <script>
+    
+  function getQuote() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var swQuote = JSON.parse(this.responseText);
+        document.getElementById("quote").innerHTML =
+        swQuote.starWarsQuote;
+      }
+    };
+  xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
+  xhttp.send();
+  }
+  
+    </script>
+  </body>
+</html>
