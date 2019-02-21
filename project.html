@@ -15,16 +15,18 @@
   </head>
   <body>
     <div>
+      <h3>Press the button to view a random quote from a Star Wars movie</h3>
       <button type="button" onClick="getQuote()">quote</button>
     </div>
     <div id="quote" class="qtBlck">
-      quote goes here!
+      quote appears here!
     </div>
+<!--
     <div id="comic">
       comic goes here
     </div>
+-->    
     <script>
-    
   function getQuote() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -37,7 +39,7 @@
   xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
   xhttp.send();
   }
-  
+
     </script>
   </body>
 </html>

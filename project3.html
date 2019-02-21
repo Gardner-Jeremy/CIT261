@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title></title>
+  <style>
+  div {
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+  }
+  .qtBlck {
+    width: 1000px;
+    height: 75px;
+    background: #09f;
+    color: white;
+    padding: 10px;
+  }
+  .movie {
+    width: 250px;
+    height: 150px;
+    background: #ccc;
+
+  }
+  .flex-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    align-content: center;
+  }
+  .crawler {
+    flex-basis: 600px;
+  }
+  
+
+  </style>
+  <script src="swapi.js" type="text/javascript"></script>
+  <script>
+
+  var swData = {};
+    
+
+  function getData() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        saveToLocal(xhttp.responseText);
+      }
+    };
+  xhttp.open("GET", "https://swapi.co/api/films/" , true);
+  xhttp.send();
+}
+
+function saveToLocal(response) {
+	movieData = JSON.parse(response);
+	
+	localStorage.clear();
+	for (a = 0; a < movieData.results.length; a++)
+		localStorage.setItem("M-" + a, JSON.stringify(movieData.results[a]));
+		
+}
+
+function displayMovie() {
+	var x = document.getElementById("episode").value;
+  var ep = localStorage.getItem("M-" + x);
+  ep = JSON.parse(ep);
+  document.getElementById("movie").innerHTML = "<h4>Title: " + ep.title + "</h4>" +
+												"Episode: " + ep.episode_id + 
+												"<BR>Release Date: " + ep.release_date;
+  document.getElementById("crawl").innerHTML = ep.opening_crawl;                      
+}
+
+  function getQuote() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var swQuote = JSON.parse(this.responseText);
+        document.getElementById("quote").innerHTML =
+        swQuote.starWarsQuote;
+      }
+    };
+  xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
+  xhttp.send();
+  }
+
+getData();
+  </script>
+
+  </head>
+  <body>
+    <div id="quote" class="qtBlck">
+      Click the quote button to see a random quote appear here!
+      
+    </div>
+    <button type="button" onClick="getQuote()">quote</button>
+    <!--
+    <div id="data" class="dtBlck">
+      data goes here
+    </div>
+    -->
+    <div class="flex-container">
+    <div class="movie">
+    <select id="episode" onchange="displayMovie()" size="7">
+      <option value=2>The Phantom Menace</option>
+      <option value=1>Attack Of The Clones</option>
+      <option value=3>Revenge Of The Sith</option>
+      <option value=0>A New Hope</option>
+      <option value=5>The Empire Strikes Back</option>
+      <option value=4>Return Of The Jedi</option>
+      <option value=6>The Force Awakens</option>
+    </select>
+    </div>
+    <div class="movie crawler">
+      <div id="crawl">Select a movie from the box above to view information</div>
+      </div>
+    
+    <div id="side-1" class="movie">
+      <div id="movie"></div>
+    </div>
+    </div>
+    <div>
+      <p>This page demonstrates requesting data from a JSON file via an AJAX call, storing the requested JSON file in local storage, and retrieving that data. Two separate APIs are used, one for the random quote generator (does not use local storage) and one for the movie information (does use local storage)
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+
