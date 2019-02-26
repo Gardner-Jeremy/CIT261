@@ -37,11 +37,9 @@
   </style>
   <script src="swapi.js" type="text/javascript"></script>
   <script>
+  var swData = {};
 
-  var swData;
-
-
-  function getData() {
+  function getDataFilm() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -53,39 +51,50 @@
 }
 
 function saveToLocal(response) {
-	swData = JSON.parse(response);
+  swData = JSON.parse(response);
 
-	localStorage.clear();
-	for (a = 0; a < swData.results.length; a++)
-		localStorage.setItem("M-" + a, JSON.stringify(swData.results[a]));
+  localStorage.clear();
+  for (a = 0; a < swData.results.length; a++)
+    localStorage.setItem("films" + a, JSON.stringify(swData.results[a]));
 }
 
+function popSelect() {
+  for (e = 0; e < swData.count; e++) {
+    var x = document.getElementById("episode");
+    var option = document.createElement("option");
+    var ep = swData.results[e];
+    option.text = ep.title;
+    option.value = e;
+    x.add(option);
+    }
+  document.getElementById("filmBtn").removeEventListener("click", popSelect);
+}
 
 function displayMovie() {
-	var x = document.getElementById("episode").value;
-  var ep = localStorage.getItem("M-" + x);
-  ep = JSON.parse(ep);
+  var x = document.getElementById("episode").value;
+  var ep = swData.results[x];
+
   document.getElementById("movie").innerHTML = "<h4>Title: " + ep.title + "</h4>" +
-												"Episode: " + ep.episode_id +
-												"<BR>Release Date: " + ep.release_date;
+                        "Episode: " + ep.episode_id +
+                        "<BR>Release Date: " + ep.release_date;
   document.getElementById("crawl").innerHTML = ep.opening_crawl;
 }
 
-  function getQuote() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var swQuote = JSON.parse(this.responseText);
-        document.getElementById("quote").innerHTML =
-        swQuote.starWarsQuote;
-      }
-    };
+function getQuote() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var swQuote = JSON.parse(this.responseText);
+      document.getElementById("quote").innerHTML =
+      swQuote.starWarsQuote;
+    }
+  };
   xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
   xhttp.send();
   }
 
+  getDataFilm();
 
-getData();
   </script>
 
   </head>
@@ -94,7 +103,11 @@ getData();
       Click the quote button to see a random quote appear here!
 
     </div>
-    <button type="button" onClick="getQuote()">quote</button>
+
+    <div>
+      <button id="quoteBtn">quote</button>
+      <button id="filmBtn">Episodes</button>
+    </div>
     <!--
     <div id="data" class="dtBlck">
       data goes here
@@ -102,18 +115,11 @@ getData();
     -->
     <div class="flex-container">
     <div class="movie">
-    <select id="episode" onchange="displayMovie()" size="7">
-      <option value=2>The Phantom Menace</option>
-      <option value=1>Attack Of The Clones</option>
-      <option value=3>Revenge Of The Sith</option>
-      <option value=0>A New Hope</option>
-      <option value=5>The Empire Strikes Back</option>
-      <option value=4>Return Of The Jedi</option>
-      <option value=6>The Force Awakens</option>
+    <select id="episode" size="7">
     </select>
     </div>
     <div class="movie crawler">
-      <div id="crawl">Select a movie from the box above to view information</div>
+      <div id="crawl">Select a movie from the box to view information</div>
     </div>
 
     <div class="movie">
@@ -123,5 +129,11 @@ getData();
     <div>
       <p>This page demonstrates requesting data from a JSON file via an AJAX call, storing the requested JSON file in local storage, and retrieving that data. Two separate APIs are used, one for the random quote generator (does not use local storage) and one for the movie information (does use local storage)
     </div>
+
+    <script>
+      document.getElementById("episode").addEventListener("change", displayMovie);
+      document.getElementById("filmBtn").addEventListener("click", popSelect);
+      document.getElementById("quoteBtn").addEventListener("click", getQuote);
+    </script>
   </body>
 </html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+div {
+  border-radius: 10px;
+  padding: 5px;
+  margin: 5px;
+}
+.qtBlck {
+  width: 1000px;
+  height: 75px;
+  background: #ccc;
+  padding: 10px;
+}
+.dataBlck {
+  flex-basis: 500px;
+  height: 150px;
+  background: #ccc;
+}
+.movie {
+  width: 250px;
+  height: 150px;
+  background: #ccc;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  align-content: center;
+}
+.crawler {
+  flex-basis: 600px;
+}
+
+
+</style>
+</head>
+<body>
+
+<h2>Star Wars Data</h2>
+<p>Click on the menu item to view content for that topic:</p>
+<p>The quote tab will display a random Star Wars Quote.
+  Other tabs display information from the Star Wars Universe,
+  gathered from the Star Wars API (swapi.co)
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'quotes')">Quotes</button>
+  <button class="tablinks" onclick="openCity(event, 'films')">Films</button>
+  <button class="tablinks" onclick="openCity(event, 'people')">People</button>
+  <button class="tablinks" onclick="openCity(event, 'planets')">Planets</button>
+  <button class="tablinks" onclick="openCity(event, 'starships')">Starships</button>
+  <button class="tablinks" onclick="openCity(event, 'vehicles')">Vehicles</button>
+</div>
+
+<div id ="quotes" class="tabcontent">
+  <div id="quote" class="qtBlck">
+    Click the quote button to see a random quote appear here!
+  </div>
+</div>
+
+<div id="films" class="tabcontent">
+<div class="flex-container">
+<div class="movie">
+<select id="episode" size="7">
+</select>
+</div>
+<div class="movie crawler">
+  <div id="crawl">Select a movie from the box to view information</div>
+</div>
+
+<div class="movie">
+  <div id="movie"></div>
+</div>
+</div>
+</div>
+
+<div id="people" class="tabcontent">
+<div class="flex-container">
+  <div id="quote" class="dataBlck">
+    people list goes here
+  </div>
+  <div id="quote" class="dataBlck">
+    people data goes here
+  </div>
+</div>
+</div>
+
+<div id="planets" class="tabcontent">
+<div class="flex-container">
+  <div id="quote" class="dataBlck">
+    planet list goes here
+  </div>
+  <div id="quote" class="dataBlck">
+    planet data goes here
+  </div>
+</div>
+</div>
+
+<div id="starships" class="tabcontent">
+<div class="flex-container">
+  <div id="quote" class="dataBlck">
+    starship list goes here
+  </div>
+  <div id="quote" class="dataBlck">
+    starship data goes here
+  </div>
+</div>
+</div>
+
+<div id="vehicles" class="tabcontent">
+  <div class="flex-container">
+    <div id="quote" class="dataBlck">
+      vehicle list goes here
+    </div>
+    <div id="quote" class="dataBlck">
+      vehicle data goes here
+    </div>
+  </div>
+</div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+</body>
+</html>
