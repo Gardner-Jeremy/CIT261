@@ -48,14 +48,26 @@ div {
 }
 .qtBlck {
   width: 1000px;
-  height: 75px;
+
   background: #ccc;
   padding: 10px;
 }
 .dataBlck {
   flex-basis: 500px;
-  height: 150px;
+  
   background: #ccc;
+}
+.dataBlckPe {
+  background-color: #ff3333;
+}
+.dataBlckPl {
+  background-color: #99cc00;
+}
+.dataBlckS {
+  background-color: #0099ff;
+}
+.dataBlckV {
+  background-color: #666699;
 }
 .movie {
   width: 250px;
@@ -75,18 +87,80 @@ div {
 
 
 </style>
+<script>
+var swData = {};
+
+function getDataFilm() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      saveToLocal(xhttp.responseText);
+    }
+  };
+xhttp.open("GET", "https://swapi.co/api/films/" , true);
+xhttp.send();
+}
+
+function saveToLocal(response) {
+swData = JSON.parse(response);
+
+localStorage.clear();
+for (a = 0; a < swData.results.length; a++)
+  localStorage.setItem("films" + a, JSON.stringify(swData.results[a]));
+}
+
+function popSelect() {
+for (e = 0; e < swData.count; e++) {
+  var x = document.getElementById("episode");
+  var option = document.createElement("option");
+  var ep = swData.results[e];
+  option.text = ep.title;
+  option.value = e;
+  x.add(option);
+  }
+document.getElementById("filmBtn").removeEventListener("click", popSelect);
+}
+
+function displayMovie() {
+var x = document.getElementById("episode").value;
+var ep = swData.results[x];
+
+document.getElementById("movie").innerHTML = "<h4>Title: " + ep.title + "</h4>" +
+                      "Episode: " + ep.episode_id +
+                      "<BR>Release Date: " + ep.release_date;
+document.getElementById("crawl").innerHTML = ep.opening_crawl;
+}
+
+function getQuote() {
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var swQuote = JSON.parse(this.responseText);
+    document.getElementById("quote").innerHTML =
+    swQuote.starWarsQuote;
+  }
+};
+xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
+xhttp.send();
+}
+
+getDataFilm();
+
+</script>
+
 </head>
 <body>
 
 <h2>Star Wars Data</h2>
 <p>Click on the menu item to view content for that topic:</p>
 <p>The quote tab will display a random Star Wars Quote.
+  Click the Quotes menu item to see a different quote.
   Other tabs display information from the Star Wars Universe,
   gathered from the Star Wars API (swapi.co)
 
 <div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'quotes')">Quotes</button>
-  <button class="tablinks" onclick="openCity(event, 'films')">Films</button>
+  <button class="tablinks" onclick="openCity(event, 'quotes')" id="quoteBtn">Quotes</button>
+  <button class="tablinks" onclick="openCity(event, 'films')" id="filmBtn">Films</button>
   <button class="tablinks" onclick="openCity(event, 'people')">People</button>
   <button class="tablinks" onclick="openCity(event, 'planets')">Planets</button>
   <button class="tablinks" onclick="openCity(event, 'starships')">Starships</button>
@@ -94,9 +168,7 @@ div {
 </div>
 
 <div id ="quotes" class="tabcontent">
-  <div id="quote" class="qtBlck">
-    Click the quote button to see a random quote appear here!
-  </div>
+  <div id="quote" class="qtBlck"></div>
 </div>
 
 <div id="films" class="tabcontent">
@@ -120,7 +192,7 @@ div {
   <div id="quote" class="dataBlck">
     people list goes here
   </div>
-  <div id="quote" class="dataBlck">
+  <div id="quote" class="dataBlck dataBlckPe">
     people data goes here
   </div>
 </div>
@@ -131,7 +203,7 @@ div {
   <div id="quote" class="dataBlck">
     planet list goes here
   </div>
-  <div id="quote" class="dataBlck">
+  <div id="quote" class="dataBlck dataBlckPl">
     planet data goes here
   </div>
 </div>
@@ -142,7 +214,7 @@ div {
   <div id="quote" class="dataBlck">
     starship list goes here
   </div>
-  <div id="quote" class="dataBlck">
+  <div id="quote" class="dataBlck dataBlckS">
     starship data goes here
   </div>
 </div>
@@ -153,7 +225,7 @@ div {
     <div id="quote" class="dataBlck">
       vehicle list goes here
     </div>
-    <div id="quote" class="dataBlck">
+    <div id="quote" class="dataBlck dataBlckV">
       vehicle data goes here
     </div>
   </div>
@@ -173,6 +245,12 @@ function openCity(evt, cityName) {
   document.getElementById(cityName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+
+document.getElementById("episode").addEventListener("change", displayMovie);
+document.getElementById("filmBtn").addEventListener("click", popSelect);
+document.getElementById("quoteBtn").addEventListener("click", getQuote);
+
 </script>
 
 </body>
