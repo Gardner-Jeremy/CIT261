@@ -105,8 +105,13 @@ div {
 }
 
 </style>
+<script src="lib/swapi.js"></script>
 <script>
 var swData = {};
+var swPeople = {};
+var swPlanets = {};
+var swShips = {};
+var swVehicles = {};
 
 function getDataFilm() {
   var xhttp = new XMLHttpRequest();
@@ -167,7 +172,71 @@ function divSpin() {
   document.getElementById("quoteBox").classList.toggle("still");
 }
 
+function peopleData() {
+  swapiModule.getPeople(function(data) {
+    swPeople = data;
+  });
+}
+
+function planetData() {
+  swapiModule.getPlanets(function(data) {
+    swPlanets = data;
+  });
+}
+
+function starshipData() {
+  swapiModule.getStarships(function(data) {
+    swShips = data;
+  });
+}
+
+function vehicleData() {
+  swapiModule.getVehicles(function(data) {
+    swVehicles = data;
+  });
+}
+
+function peopleDisplay() {
+  for (var i = 0; i < swPeople.results.length; i++) {
+    var d = document.createElement('P');
+    var t = document.createTextNode(swPeople.results[i].name);
+    d.appendChild(t);
+    document.getElementById("peepData").appendChild(d);
+  }
+}
+
+function planetDisplay() {
+  for (var i = 0; i < swPlanets.results.length; i++) {
+    var d = document.createElement('P');
+    var t = document.createTextNode(swPlanets.results[i].name);
+    d.appendChild(t);
+    document.getElementById("planData").appendChild(d);
+  }
+}
+
+function starshipDisplay() {
+  for (var i = 0; i < swShips.results.length; i++) {
+    var d = document.createElement('P');
+    var t = document.createTextNode(swShips.results[i].name);
+    d.appendChild(t);
+    document.getElementById("sData").appendChild(d);
+  }
+}
+
+function vehicleDisplay() {
+  for (var i = 0; i < swVehicles.results.length; i++) {
+    var d = document.createElement('P');
+    var t = document.createTextNode(swVehicles.results[i].name);
+    d.appendChild(t);
+    document.getElementById("vData").appendChild(d);
+  }
+}
+
 getDataFilm();
+peopleData();
+planetData();
+starshipData();
+vehicleData();
 
 </script>
 
@@ -191,10 +260,10 @@ getDataFilm();
 
 <div class="tab">
   <button class="tablinks" onclick="openNav(event, 'films')" id="filmBtn">Films</button>
-  <button class="tablinks" onclick="openNav(event, 'people')">People</button>
-  <button class="tablinks" onclick="openNav(event, 'planets')">Planets</button>
-  <button class="tablinks" onclick="openNav(event, 'starships')">Starships</button>
-  <button class="tablinks" onclick="openNav(event, 'vehicles')">Vehicles</button>
+  <button class="tablinks" onclick="openNav(event, 'people')" id="peopleBtn">People</button>
+  <button class="tablinks" onclick="openNav(event, 'planets')" id="planetBtn">Planets</button>
+  <button class="tablinks" onclick="openNav(event, 'starships')" id="starshipBtn">Starships</button>
+  <button class="tablinks" onclick="openNav(event, 'vehicles')" id="vehicleBtn">Vehicles</button>
 </div>
 
 <div id="films" class="tabcontent">
@@ -215,10 +284,8 @@ getDataFilm();
 
 <div id="people" class="tabcontent">
 <div class="flex-container">
-  <div id="peopleData" class="dataBlck">
-    people list goes here
-  </div>
-  <div id="peopleData" class="dataBlck dataBlckPe">
+  <div id="peepData" class="dataBlck"></div>
+  <div id="peepData" class="dataBlck dataBlckPe">
     people data goes here
   </div>
 </div>
@@ -226,10 +293,8 @@ getDataFilm();
 
 <div id="planets" class="tabcontent">
 <div class="flex-container">
-  <div id="planetData" class="dataBlck">
-    planet list goes here
-  </div>
-  <div id="planetData" class="dataBlck dataBlckPl">
+  <div id="planData" class="dataBlck"></div>
+  <div id="planData" class="dataBlck dataBlckPl">
     planet data goes here
   </div>
 </div>
@@ -237,10 +302,8 @@ getDataFilm();
 
 <div id="starships" class="tabcontent">
 <div class="flex-container">
-  <div id="starshipData" class="dataBlck">
-    starship list goes here
-  </div>
-  <div id="starshipData" class="dataBlck dataBlckS">
+  <div id="sData" class="dataBlck"></div>
+  <div id="sData" class="dataBlck dataBlckS">
     starship data goes here
   </div>
 </div>
@@ -248,10 +311,8 @@ getDataFilm();
 
 <div id="vehicles" class="tabcontent">
   <div class="flex-container">
-    <div id="vehicleData" class="dataBlck">
-      vehicle list goes here
-    </div>
-    <div id="vehicleData" class="dataBlck dataBlckV">
+    <div id="vData" class="dataBlck"></div>
+    <div id="vData" class="dataBlck dataBlckV">
       vehicle data goes here
     </div>
   </div>
@@ -276,7 +337,10 @@ document.getElementById("episode").addEventListener("change", displayMovie);
 document.getElementById("filmBtn").addEventListener("click", popSelect);
 document.getElementById("quoteBtn").addEventListener("click", divSpin);
 document.getElementById("quoteBtn").addEventListener("click", getQuote);
-
+document.getElementById("peopleBtn").addEventListener("click", peopleDisplay);
+document.getElementById("planetBtn").addEventListener("click", planetDisplay);
+document.getElementById("starshipBtn").addEventListener("click", starshipDisplay);
+document.getElementById("vehicleBtn").addEventListener("click", vehicleDisplay);
 </script>
 
 </body>
