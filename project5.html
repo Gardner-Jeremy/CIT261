@@ -1,0 +1,283 @@
+<!DOCTYPE xhtml>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tabcontent1 {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.tabshow {
+  display: block;
+}
+div {
+  border-radius: 10px;
+}
+.qtBlck {
+  background: #ccc;
+  padding: 15px;
+  min-height: 50px;
+  width: 600px;
+  background: linear-gradient(135deg, #f7d2cf 0%,#e77973 24%,#d6140a 50%,#e15a53 79%,#ea8d88 100%);
+  transition: transform 1.0s ease-out;
+  perspective: 1000px;
+}
+.dataBlck {
+  flex-basis: 20%;
+  background: #ccc;
+  padding: 10px;
+  background: linear-gradient(135deg, #d0e4f7 0%,#73b1e7 24%,#0a77d5 50%,#539fe1 79%,#87bcea 100%);
+}
+.dataBlckPe {
+  background: linear-gradient(45deg, rgba(245,246,246,1) 0%,rgba(219,220,226,1) 21%,rgba(184,186,198,1) 49%,rgba(221,223,227,1) 80%,rgba(245,246,246,1) 100%);
+  flex-basis: 70%;
+}
+.dataBlckPl {
+  background: linear-gradient(135deg, rgba(247,251,252,1) 0%,rgba(217,237,242,1) 40%,rgba(173,217,228,1) 100%);
+  flex-basis: 70%;
+}
+.dataBlckS {
+  background: linear-gradient(135deg, rgba(180,227,145,1) 0%,rgba(97,196,25,1) 50%,rgba(180,227,145,1) 100%);
+  flex-basis: 70%;
+}
+.dataBlckV {
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(237,237,237,1) 51%,rgba(255,255,255,1) 100%);
+  flex-basis: 70%;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  min-height: 150px;
+  margin: 0;
+}
+.crawler {
+  flex-basis: 45%;
+}
+
+.still {
+  transform: rotateX(0deg);
+}
+.spin {
+  transform: rotateX(2160deg);
+}
+
+</style>
+<script>
+var swData = {};
+
+function getDataFilm() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      saveToLocal(xhttp.responseText);
+    }
+  };
+xhttp.open("GET", "https://swapi.co/api/films/" , true);
+xhttp.send();
+}
+
+function saveToLocal(response) {
+swData = JSON.parse(response);
+
+localStorage.clear();
+for (a = 0; a < swData.results.length; a++)
+  localStorage.setItem("films" + a, JSON.stringify(swData.results[a]));
+}
+
+function popSelect() {
+for (e = 0; e < swData.count; e++) {
+  var x = document.getElementById("episode");
+  var option = document.createElement("option");
+  var ep = swData.results[e];
+  option.text = ep.title;
+  option.value = e;
+  x.add(option);
+  }
+document.getElementById("filmBtn").removeEventListener("click", popSelect);
+}
+
+function displayMovie() {
+var x = document.getElementById("episode").value;
+var ep = swData.results[x];
+
+document.getElementById("movie").innerHTML = "<h4>Title: " + ep.title + "</h4>" +
+                      "Episode: " + ep.episode_id +
+                      "<BR>Release Date: " + ep.release_date;
+document.getElementById("crawl").innerHTML = ep.opening_crawl;
+}
+
+function getQuote() {
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var swQuote = JSON.parse(this.responseText);
+    document.getElementById("quoteBox").innerHTML =
+    swQuote.starWarsQuote;
+  }
+};
+xhttp.open("GET", "http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote", true);
+xhttp.send();
+}
+
+function divSpin() {
+  document.getElementById("quoteBox").classList.toggle("spin");
+  document.getElementById("quoteBox").classList.toggle("still");
+}
+
+getDataFilm();
+
+</script>
+
+</head>
+<body>
+
+<h2>Star Wars Data</h2>
+<p>Click on the menu item to view content for that topic:</p>
+<p>The quote tab will display a random Star Wars Quote.
+  Click the Quotes menu item to see a different quote.
+  Other tabs display information from the Star Wars Universe,
+  gathered from the Star Wars API (swapi.co)
+
+<div class="tab">
+  <button class="tablinks" id="quoteBtn">Quotes</button>
+</div>
+
+<div id="quotes" class="tabcontent1 tabshow">
+  <div id="quoteBox" class="qtBlck spin"></div>
+</div>
+
+<div class="tab">
+  <button class="tablinks" onclick="openNav(event, 'films')" id="filmBtn">Films</button>
+  <button class="tablinks" onclick="openNav(event, 'people')">People</button>
+  <button class="tablinks" onclick="openNav(event, 'planets')">Planets</button>
+  <button class="tablinks" onclick="openNav(event, 'starships')">Starships</button>
+  <button class="tablinks" onclick="openNav(event, 'vehicles')">Vehicles</button>
+</div>
+
+<div id="films" class="tabcontent">
+<div class="flex-container">
+<div class="dataBlck">
+<select id="episode" size="7">
+</select>
+</div>
+<div class="dataBlck crawler">
+  <div id="crawl">Select a movie from the box to view information</div>
+</div>
+
+<div class="dataBlck">
+  <div id="movie"></div>
+</div>
+</div>
+</div>
+
+<div id="people" class="tabcontent">
+<div class="flex-container">
+  <div id="peopleData" class="dataBlck">
+    people list goes here
+  </div>
+  <div id="peopleData" class="dataBlck dataBlckPe">
+    people data goes here
+  </div>
+</div>
+</div>
+
+<div id="planets" class="tabcontent">
+<div class="flex-container">
+  <div id="planetData" class="dataBlck">
+    planet list goes here
+  </div>
+  <div id="planetData" class="dataBlck dataBlckPl">
+    planet data goes here
+  </div>
+</div>
+</div>
+
+<div id="starships" class="tabcontent">
+<div class="flex-container">
+  <div id="starshipData" class="dataBlck">
+    starship list goes here
+  </div>
+  <div id="starshipData" class="dataBlck dataBlckS">
+    starship data goes here
+  </div>
+</div>
+</div>
+
+<div id="vehicles" class="tabcontent">
+  <div class="flex-container">
+    <div id="vehicleData" class="dataBlck">
+      vehicle list goes here
+    </div>
+    <div id="vehicleData" class="dataBlck dataBlckV">
+      vehicle data goes here
+    </div>
+  </div>
+</div>
+
+<script>
+function openNav(evt, navName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(navName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+document.getElementById("episode").addEventListener("change", displayMovie);
+document.getElementById("filmBtn").addEventListener("click", popSelect);
+document.getElementById("quoteBtn").addEventListener("click", divSpin);
+document.getElementById("quoteBtn").addEventListener("click", getQuote);
+
+</script>
+
+</body>
+</html>
