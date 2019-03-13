@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Starfield effect done in HTML 5</title>
-
     <script>
         /*
          * Starfield effect done in HTML 5
@@ -29,15 +28,14 @@
          * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
          * SOFTWARE.
          */
-
-        window.onload = function () {
+        window.onload = function() {
 
             /* --- config start --- */
 
             var starfieldCanvasId     = "starfieldCanvas", // id of the canvas to use
                 framerate             = 60,                // frames per second this animation runs at (this is not exact)
-                numberOfStarsModifier = 1.0;               // Number of stars, higher numbers have performance impact
-                flightSpeed           = 0.002;             // speed of the flight, the higher this number the faster
+                numberOfStarsModifier = 1.0,               // Number of stars, higher numbers have performance impact
+                flightSpeed           = 0.02;              // speed of the flight, the higher this number the faster
 
             /* ---- config end ---- */
 
@@ -51,7 +49,6 @@
                 stars         = [],
                 TWO_PI        = Math.PI * 2;
 
-
             // initialize starfield
             for(var x = 0; x < numberOfStars; x++) {
                 stars[x] = {
@@ -62,10 +59,10 @@
             }
 
             // when mouse moves over canvas change middle point of animation
-            //canvas.onmousemove = function(event) {
-            //    dirX = event.offsetX,
-            //    dirY = event.offsetY;
-            //}
+            canvas.onmousemove = function(event) {
+                dirX = event.offsetX,
+                dirY = event.offsetY;
+            }
 
             // start tick at specified fps
             window.setInterval(tick, Math.floor(1000 / framerate));
@@ -104,8 +101,6 @@
                     context.moveTo(oldX, oldY);
                     context.lineTo(stars[x].x, stars[x].y);
                     context.stroke();
-
-
                 }
             }
 
@@ -113,40 +108,10 @@
             function range(start, end) {
                 return Math.random() * (end - start) + start;
             }
-
         };
-
-        function jumpSpeed() {
-          if (flightSpeed == 0.002) {
-            flightSpeed = 0.1;
-          }
-          else {
-            flightSpeed = 0.002;
-          }
-        }
-        function hyperSound() {
-          var x = document.getElementById("jumpSound");
-          if (flightSpeed == 0.002) {
-          x.play();
-          }
-        }
-
     </script>
 </head>
 <body style="background:#000;">
-    <audio id="jumpSound">
-      <source src="lightspeed.mp3" type="audio/mpeg">
-    </audio>
-    <div>
-      <canvas width="600" height="400" id="starfieldCanvas"></canvas>
-      <br>
-      <button id="hyperToggle1">Jump to Hyperspeed</button>
-      <button id="hyperToggle2">Exit Hyperspeed</button>
-    </div>
-    <script>
-      document.getElementById("hyperToggle1").addEventListener("click", hyperSound);
-      document.getElementById("hyperToggle1").addEventListener("click", function() { setTimeout(jumpSpeed, 5000)});
-      document.getElementById("hyperToggle2").addEventListener("click", jumpSpeed);
-    </script>
+    <canvas width="500" height="400" id="starfieldCanvas"></canvas>
 </body>
 </html>
