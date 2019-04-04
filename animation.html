@@ -4,21 +4,34 @@
     <meta charset="utf-8">
     <title></title>
     <style media="screen">
-      @keyframes wink {
+      @keyframes walk {
           from { background-position: 0px; }
           to { background-position: -624px; }
       }
-      .hi {
+      .stroll {
           width: 104px;
           height: 152px;
           background-image: url("gb_walk.png");
-          margin: 0 auto;
-          animation: wink 1s steps(6, end) infinite;
+          margin-left: 400px;
+          animation: walk 1s steps(6, end) infinite;
+          transition: all 4s linear;
+      }
+      .pace {
+        width: 500px;
+        height: 175px;
+        border-style: groove;
+        overflow: hidden;
+      }
+
+      #box:hover .move-right {
+        transform: translate(-510px,0);
       }
     </style>
   </head>
   <body>
-    <img src="gb_walk.png">
-    <div class="hi"></div>
+    <div id="box" class="pace">
+      <div class="stroll move-right "></div>
+    </div>
+    Hover over the box to watch Guybrush moon walk.
   </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+<script>
+  function Favorite(name, movie, character, quote) {
+  this.name = name;
+  this.movie = movie;
+  this.character = character;
+  this.quote = quote;
+
+  this.getFaveMovie = function() {
+    return this.name + "\'s favorite movie is: " + this.movie + "<br>" +
+    this.name + "\'s favorite character is: " + this.character + "<br>" +
+    this.name + "\'s favorite quote is: " + this.quote;
+  }
+
+}
+
+function defineFaves() {
+  var name = document.getElementById("name").value;
+  var movie = document.getElementById("movie").value;
+  var character = document.getElementById("character").value;
+  var quote = document.getElementById("quote").value;
+
+  var faves = new Favorite(name,movie,character,quote);
+  document.getElementById("showResults").innerHTML = faves.getFaveMovie();
+}
+</script>
+</head>
+<body>
+<h3>Enter your name, your favorite movie, and your favorite character and favorite quote from that movie.</h3>
+
+Name: <input id="name" type="text">
+<br>
+Favorite movie: <input id="movie" type="text">
+<br>
+Favorite character from that movie: <input id="character" type="text">
+<br>
+Favorite quote from that movie: <input id="quote" type="text">
+<br>
+<button type="submit" onclick="defineFaves()">Show me!</button>
+
+<div id="showResults"></div>
+</body>
+</html>

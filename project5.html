@@ -3,18 +3,59 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {font-family: Arial;}
+body {
+  font-family: Arial;
+}
+.banner {
+  z-index: 0;
+  position: relative;
+  text-align: center;
+  overflow-x: hidden;
+  color: white;
+}
+
+.tab:after {
+  content: "";
+  top: 0;
+  z-index: 1;
+  transform: translateX(100%);
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  animation: slide 7s ease infinite alternate;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%);
+}
+
+select {
+  width: 250px;
+  background-color: inherit;
+  border: none;
+  padding: 5px 10px;
+  overflow: hidden;
+}
+
+select option {
+  padding: 10px 15px;
+}
+
+select option:hover {
+  color: white;
+  background-color: black;
+}
 
 /* Style the tab */
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  border-radius: 0;
+  background-color: #595959;
+  padding-left: 10px;
+  transform: skewX(-15deg);
 }
 
 /* Style the buttons inside the tab */
 .tab button {
-  background-color: inherit;
+  background-color: #999;
   float: left;
   border: none;
   outline: none;
@@ -22,11 +63,39 @@ body {font-family: Arial;}
   padding: 14px 16px;
   transition: 0.3s;
   font-size: 17px;
+  margin-right: 3px;
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  transition-property: color;
+  transition-duration: 0.3s;
+
+}
+
+.tab button:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ccc;
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition-property: transform;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+}
+
+.tab button:hover:before, .tab button:focus:before, .tab button:active:before {
+  transform: scaleY(1);
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
   background-color: #ddd;
+  transform: scale(1.2);
 }
 
 /* Create an active/current tablink class */
@@ -40,6 +109,8 @@ body {font-family: Arial;}
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
+  overflow: hidden;
+  transition: all .5s ease-in-out;
 }
 
 .tabcontent1 {
@@ -51,9 +122,7 @@ body {font-family: Arial;}
 .tabshow {
   display: block;
 }
-div {
-  border-radius: 10px;
-}
+
 .qtBlck {
   background: #ccc;
   padding: 15px;
@@ -68,6 +137,7 @@ div {
   background: #ccc;
   padding: 10px;
   background: linear-gradient(135deg, #d0e4f7 0%,#73b1e7 24%,#0a77d5 50%,#539fe1 79%,#87bcea 100%);
+
 }
 .dataBlckPe {
   background: linear-gradient(45deg, rgba(245,246,246,1) 0%,rgba(219,220,226,1) 21%,rgba(184,186,198,1) 49%,rgba(221,223,227,1) 80%,rgba(245,246,246,1) 100%);
@@ -102,6 +172,53 @@ div {
 }
 .spin {
   transform: rotateX(2160deg);
+}
+
+@keyframes move-background {
+  from {
+    transform: translate3d(0px, 0px, 0px);
+  }
+  to {
+    transform: translate3d(1000px, 0px, 0px);
+  }
+}
+
+@keyframes slide {
+	from { transform:translateX(-10000px); }
+	to { transform:translateX(8000px); }
+}
+
+.background-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.stars {
+  background: black url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/stars.png) repeat;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  z-index: 0;
+}
+
+.twinkling {
+  width: 10000px;
+  height: 100%;
+  background: transparent url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1231630/twinkling.png") repeat;
+  background-size: 1000px 1000px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  animation: move-background 70s linear infinite;
 }
 
 </style>
@@ -144,6 +261,54 @@ for (e = 0; e < swData.count; e++) {
 document.getElementById("filmBtn").removeEventListener("click", popSelect);
 }
 
+function popSelectPeople() {
+for (i = 0; i < swPeople.results.length; i++) {
+  var x = document.getElementById("peepData");
+  var option = document.createElement("option");
+  var p = swPeople.results[i];
+  option.text = p.name;
+  option.value = i;
+  x.add(option);
+  }
+document.getElementById("peopleBtn").removeEventListener("click", popSelectPeople);
+}
+
+function popSelectPlanet() {
+for (i = 0; i < swPlanets.results.length; i++) {
+  var x = document.getElementById("planData");
+  var option = document.createElement("option");
+  var p = swPlanets.results[i];
+  option.text = p.name;
+  option.value = i;
+  x.add(option);
+  }
+document.getElementById("planetBtn").removeEventListener("click", popSelectPlanet);
+}
+
+function popSelectStarship() {
+for (i = 0; i < swShips.results.length; i++) {
+  var x = document.getElementById("sData");
+  var option = document.createElement("option");
+  var s = swShips.results[i];
+  option.text = s.name;
+  option.value = i;
+  x.add(option);
+  }
+document.getElementById("starshipBtn").removeEventListener("click", popSelectStarship);
+}
+
+function popSelectVehicle() {
+for (i = 0; i < swVehicles.results.length; i++) {
+  var x = document.getElementById("vData");
+  var option = document.createElement("option");
+  var v = swVehicles.results[i];
+  option.text = v.name;
+  option.value = i;
+  x.add(option);
+  }
+document.getElementById("vehicleBtn").removeEventListener("click", popSelectVehicle);
+}
+
 function displayMovie() {
 var x = document.getElementById("episode").value;
 var ep = swData.results[x];
@@ -152,6 +317,65 @@ document.getElementById("movie").innerHTML = "<h4>Title: " + ep.title + "</h4>" 
                       "Episode: " + ep.episode_id +
                       "<BR>Release Date: " + ep.release_date;
 document.getElementById("crawl").innerHTML = ep.opening_crawl;
+}
+
+function displayPerson() {
+var x = document.getElementById("peepData").value;
+var d = swPeople.results[x];
+
+document.getElementById("peepDataDisplay").innerHTML = "<h4>Name: " + d.name + "</h4>" +
+                      "Birth Year: " + d.birth_year +
+                      "<BR>Gender: " + d.gender +
+                      "<BR>Height: " + d.height;
+
+}
+
+function displayPlanet() {
+var x = document.getElementById("planData").value;
+var d = swPlanets.results[x];
+
+document.getElementById("planDataDisplay").innerHTML = "<h4>Name: " + d.name + "</h4>" +
+                      "Diameter: " + d.diameter +
+                      "<BR>Rotation Period: " + d.rotation_period +
+                      "<BR>Orbital Period: " + d.orbital_period +
+                      "<BR>Gravity: " + d.gravity +
+                      "<BR>Population: " + d.population +
+                      "<BR>Climate: " + d.climate +
+                      "<BR>Terrain: " + d.terrain +
+                      "<BR>Surface Water: " + d.surface_water;
+}
+
+function displayStarship() {
+var x = document.getElementById("sData").value;
+var d = swShips.results[x];
+
+document.getElementById("sDataDisplay").innerHTML = "<h4>Name: " + d.name + "</h4>" +
+                      "Model: " + d.model +
+                      "<BR>Class: " + d.starship_class +
+                      "<BR>Manufacturer: " + d.manufacturer +
+                      "<BR>Cost: " + d.cost_in_credits +
+                      "<BR>Length: " + d.length +
+                      "<BR>Crew: " + d.crew +
+                      "<BR>Passengers: " + d.passengers +
+                      "<BR>Speed: " + d.MGLT +
+                      "<BR>Cargo Capacity: " + d.cargo_capacity;
+}
+
+function displayVehicle() {
+var x = document.getElementById("vData").value;
+var d = swVehicles.results[x];
+
+document.getElementById("vDataDisplay").innerHTML = "<h4>Name: " + d.name + "</h4>" +
+                      "Model: " + d.model +
+                      "<BR>Vehicle Class: " + d.vehicle_class +
+                      "<BR>Manufacturer: " + d.manufacturer +
+                      "<BR>Length: " + d.length +
+                      "<BR>Cost: " + d.cost_in_credits +
+                      "<BR>Crew: " + d.crew +
+                      "<BR>Passengers: " + d.passengers +
+                      "<BR>Speed: " + d.max_atmospheric_speed +
+                      "<BR>Cargo Capacity: " + d.cargo_capacity +
+                      "<BR>Consumables: " + d.consumables;
 }
 
 function getQuote() {
@@ -196,41 +420,6 @@ function vehicleData() {
   });
 }
 
-function peopleDisplay() {
-  for (var i = 0; i < swPeople.results.length; i++) {
-    var d = document.createElement('P');
-    var t = document.createTextNode(swPeople.results[i].name);
-    d.appendChild(t);
-    document.getElementById("peepData").appendChild(d);
-  }
-}
-
-function planetDisplay() {
-  for (var i = 0; i < swPlanets.results.length; i++) {
-    var d = document.createElement('P');
-    var t = document.createTextNode(swPlanets.results[i].name);
-    d.appendChild(t);
-    document.getElementById("planData").appendChild(d);
-  }
-}
-
-function starshipDisplay() {
-  for (var i = 0; i < swShips.results.length; i++) {
-    var d = document.createElement('P');
-    var t = document.createTextNode(swShips.results[i].name);
-    d.appendChild(t);
-    document.getElementById("sData").appendChild(d);
-  }
-}
-
-function vehicleDisplay() {
-  for (var i = 0; i < swVehicles.results.length; i++) {
-    var d = document.createElement('P');
-    var t = document.createTextNode(swVehicles.results[i].name);
-    d.appendChild(t);
-    document.getElementById("vData").appendChild(d);
-  }
-}
 
 getDataFilm();
 peopleData();
@@ -242,14 +431,14 @@ vehicleData();
 
 </head>
 <body>
-
-<h2>Star Wars Data</h2>
-<p>Click on the menu item to view content for that topic:</p>
+<div class="banner">
+<h2>Star Wars Data Retrieval</h2>
+<p>Click on the menu item to view content for that topic.</p>
 <p>The quote tab will display a random Star Wars Quote.
   Click the Quotes menu item to see a different quote.
   Other tabs display information from the Star Wars Universe,
-  gathered from the Star Wars API (swapi.co)
-
+  gathered from the (unofficial) Star Wars API (swapi.co)
+</div>
 <div class="tab">
   <button class="tablinks" id="quoteBtn">Quotes</button>
 </div>
@@ -284,8 +473,8 @@ vehicleData();
 
 <div id="people" class="tabcontent">
 <div class="flex-container">
-  <div id="peepData" class="dataBlck"></div>
-  <div id="peepData" class="dataBlck dataBlckPe">
+  <div class="dataBlck"><select id="peepData" size=10></select></div>
+  <div class="dataBlck dataBlckPe" id="peepDataDisplay">
     people data goes here
   </div>
 </div>
@@ -293,8 +482,8 @@ vehicleData();
 
 <div id="planets" class="tabcontent">
 <div class="flex-container">
-  <div id="planData" class="dataBlck"></div>
-  <div id="planData" class="dataBlck dataBlckPl">
+  <div class="dataBlck"><select id="planData" size=10></select></div>
+  <div class="dataBlck dataBlckPl" id="planDataDisplay">
     planet data goes here
   </div>
 </div>
@@ -302,8 +491,8 @@ vehicleData();
 
 <div id="starships" class="tabcontent">
 <div class="flex-container">
-  <div id="sData" class="dataBlck"></div>
-  <div id="sData" class="dataBlck dataBlckS">
+  <div class="dataBlck"><select id="sData" size=10></select></div>
+  <div class="dataBlck dataBlckS" id="sDataDisplay">
     starship data goes here
   </div>
 </div>
@@ -311,8 +500,8 @@ vehicleData();
 
 <div id="vehicles" class="tabcontent">
   <div class="flex-container">
-    <div id="vData" class="dataBlck"></div>
-    <div id="vData" class="dataBlck dataBlckV">
+    <div class="dataBlck"><select id="vData" size=10></select></div>
+    <div class="dataBlck dataBlckV" id="vDataDisplay">
       vehicle data goes here
     </div>
   </div>
@@ -334,14 +523,21 @@ function openNav(evt, navName) {
 }
 
 document.getElementById("episode").addEventListener("change", displayMovie);
+document.getElementById("peepData").addEventListener("change", displayPerson);
+document.getElementById("planData").addEventListener("change", displayPlanet);
+document.getElementById("sData").addEventListener("change", displayStarship);
+document.getElementById("vData").addEventListener("change", displayVehicle);
 document.getElementById("filmBtn").addEventListener("click", popSelect);
 document.getElementById("quoteBtn").addEventListener("click", divSpin);
 document.getElementById("quoteBtn").addEventListener("click", getQuote);
-document.getElementById("peopleBtn").addEventListener("click", peopleDisplay);
-document.getElementById("planetBtn").addEventListener("click", planetDisplay);
-document.getElementById("starshipBtn").addEventListener("click", starshipDisplay);
-document.getElementById("vehicleBtn").addEventListener("click", vehicleDisplay);
+document.getElementById("peopleBtn").addEventListener("click", popSelectPeople);
+document.getElementById("planetBtn").addEventListener("click", popSelectPlanet);
+document.getElementById("starshipBtn").addEventListener("click", popSelectStarship);
+document.getElementById("vehicleBtn").addEventListener("click", popSelectVehicle);
 </script>
-
+<div class="background-div">
+<div class="stars"></div>
+<div class="twinkling"></div>
+</div>
 </body>
 </html>

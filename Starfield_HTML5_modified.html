@@ -2,7 +2,11 @@
 <html>
 <head>
     <title>Starfield effect done in HTML 5</title>
-
+    <style>
+      p {
+        color: #fff;
+      }
+    </style>
     <script>
         /*
          * Starfield effect done in HTML 5
@@ -116,14 +120,19 @@
 
         };
 
-        function jumpSpeed() {
-          if (flightSpeed == 0.002) {
+        // This is where  my additions to the scripts begin.
+        // Everything above this has not been modified except for
+        // the flightSpeed value. It was originally higher.
+
+        function jumpEnter() {
             flightSpeed = 0.1;
-          }
-          else {
-            flightSpeed = 0.002;
-          }
         }
+
+        function jumpExit() {
+            flightSpeed = 0.002;
+        }
+
+
         function hyperSound() {
           var x = document.getElementById("jumpSound");
           if (flightSpeed == 0.002) {
@@ -134,19 +143,24 @@
     </script>
 </head>
 <body style="background:#000;">
+  <!-- I added this audio tag and modified the initial size of the canvas -->
     <audio id="jumpSound">
       <source src="lightspeed.mp3" type="audio/mpeg">
     </audio>
     <div>
       <canvas width="600" height="400" id="starfieldCanvas"></canvas>
       <br>
+  <!-- I added these buttons -->
       <button id="hyperToggle1">Jump to Hyperspeed</button>
       <button id="hyperToggle2">Exit Hyperspeed</button>
+      <p>Be sure to turn up the volume on your computer prior to jumping to hyperspeed!</p>
+      <p>Special thanks to TimeWaster for the starfield code - <a href="https://www.timewasters-place.com/starfield-animation-done-in-html-5/">TimeWasters-Place</a></p>
     </div>
+  <!-- I also added these event handlers -->
     <script>
       document.getElementById("hyperToggle1").addEventListener("click", hyperSound);
-      document.getElementById("hyperToggle1").addEventListener("click", function() { setTimeout(jumpSpeed, 5000)});
-      document.getElementById("hyperToggle2").addEventListener("click", jumpSpeed);
+      document.getElementById("hyperToggle1").addEventListener("click", function() { setTimeout(jumpEnter, 5000)});
+      document.getElementById("hyperToggle2").addEventListener("click", jumpExit);
     </script>
 </body>
 </html>
